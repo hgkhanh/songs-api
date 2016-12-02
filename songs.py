@@ -38,7 +38,7 @@ class Songs(object):
         first = skip
         last = skip + count
         
-        return json.dumps(self.songs[first:last])
+        return self.songs[first:last]
 
     def get_average_difficulty(self):
         '''
@@ -52,9 +52,9 @@ class Songs(object):
 
         formatted_avg_difficulty = float("{0:.2f}".format(avg_difficulty,2))
 
-        return json.dumps({
-            "avg_difficulty": formatted_avg_difficulty
-            })
+        result = {}
+        result['avg_difficulty'] = formatted_avg_difficulty
+        return result
 
     def search_songs(self, phrase):
         '''
@@ -72,4 +72,4 @@ class Songs(object):
             if (phrase.lower() in song['title'].lower()) or (phrase.lower() in song['artist'].lower()):
                 result.append(song)
 
-        return json.dumps(result)
+        return result

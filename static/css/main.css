@@ -21,3 +21,26 @@ a {
   background: #555;
   color: #FFF;
 }
+
+
+/* Card
+-------------------------------------------------- */
+
+.card {
+	margin: 10px 0;    
+	display: block;
+  margin-bottom: .75rem;
+  background-color: #fff;
+  border-radius: .25rem;
+  border: 1px solid rgba(0,0,0,.125);
+}
+
+.card img {
+  height: 180px;
+  width: 100%;
+  display: block;
+}
+
+.card .card-block {
+  padding: 1.25rem;	
+}
