@@ -1,4 +1,4 @@
-from flask import Flask, request, session
+from flask import Flask, request, session, render_template, redirect, url_for
 import json
 from songs import Songs
 
@@ -9,7 +9,7 @@ app = Flask(__name__)
 
 @app.route('/')
 def home():
-    return "Home"
+    return redirect(url_for('get_all_songs'))
 
 @app.route('/songs', methods=['GET'])
 def get_all_songs():
@@ -17,7 +17,8 @@ def get_all_songs():
     count = int(request.args.get('count', 20))
 
     songs_library = Songs(Songs.TEST_FILE)
-    return songs_library.get_songs(skip, count)
+    songs = songs_library.get_songs(skip, count)
+    return render_template("pages/songs.html", songs=songs)
 
 
 @app.route('/songs/avg/difficulty', methods=['GET'])
