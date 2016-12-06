@@ -8,7 +8,7 @@ app = Flask(__name__)
 
 @app.route('/')
 def home():
-    return redirect(url_for('get_all_songs'))
+    return render_template("pages/songs.html", songs=json.loads(get_all_songs()))
 
 @app.route('/songs', methods=['GET'])
 def get_all_songs():
@@ -16,9 +16,7 @@ def get_all_songs():
     count = int(request.args.get('count', 20))
 
     songs_library = Songs(Songs.TEST_FILE)
-    songs = songs_library.get_songs(skip, count)
-    return render_template("pages/songs.html", songs=songs)
-
+    return songs_library.get_songs(skip, count)
 
 @app.route('/songs/avg/difficulty', methods=['GET'])
 def get_songs_average_difficulty():
