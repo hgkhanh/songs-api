@@ -14,11 +14,10 @@
 {% for artist in songs | groupby('artist') %}
 <div class="row">
 <h2>{{ artist.grouper }}</h2>
-{% set artist_index =  loop.index  %}	
+{% set artist_index =  loop.index  %}
 <!-- BONUS TASK 2: filter out songs with difficulty < 10 -->
-{% for song in artist.list if song.difficulty > 10 %}		
-	<!-- Generate random song rating -->
-	{% set rating =  range(1, 6) | random  %}
+<!-- Display songs sorted by rating -->
+{% for song in artist.list | sort(attribute='rating', reverse = True) if song.difficulty > 10  %}
 	{% set song_index =  loop.index  %}
 	{% set song_id =  artist_index ~ song_index  %}
 	<div class="col col-sm-6 col-md-4">
@@ -41,14 +40,13 @@
 		    <p class="card-text">Released: {{ song.released }}</p>
 		    <!-- Star Rating -->
 		    <fieldset class="rating">
-		    	<!-- Generate a random song rating -->
 					{% for star_index in range(1,6) %}
 			    <input type="radio" id="star{{ star_index}}-{{ artist_index }}{{ song_index }}" 
-			    	{% if rating == (6 - star_index) %}
+			    	{% if song.rating == (6 - star_index) %}
 			    		checked="checked"
 			    	{% endif %}
 			    	name="rating-song-{{ song_id }}" value="{{ star_index }}" />
-			    	<label class = "full" for="star{{ star_index}}-{{ artist_index }}{{ song_index }}"></label>
+			    	<label class = "star full" for="star{{ star_index}}-{{ artist_index }}{{ song_index }}"></label>
 			    {% endfor %}
 				</fieldset>
 				<!-- End Star Rating -->			    

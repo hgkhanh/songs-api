@@ -22,6 +22,11 @@ class Songs(object):
         # Sort by released
         songs_obj.sort(key=lambda x:x['released'], reverse=True)
 
+        # No rating mentioned in song.json ? generate rating based on difficulty
+            # get max difficulty to be 5 star
+        maxDiff = max(map(lambda x: x['difficulty'], songs_obj))
+        for song in songs_obj:
+            song['rating'] = int((song['difficulty']/maxDiff)*5)
         self.songs = songs_obj
 
     def get_songs(self, skip=0, count=20):
