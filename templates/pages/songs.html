@@ -3,24 +3,61 @@
 {% block content %}
 
 <div>
-  <h1>Songs</h1>
+<h1>Songs</h1>
 </div>
 <p>All songs listed. Search for songs</p>
 
+<!-- BONUS TASK 4: Calculate combined length -->
+<p>Combined length of all song titles: {{ songs | join('', attribute='title') | length() }}
+
+<!-- BONUS TASK 3 : Group by Artist -->
+{% for artist in songs | groupby('artist') %}
 <div class="row">
-	{% for song in songs %}
-		<div class="col col-sm-4">
-			<div class="card">
-			  <img class="card-img-top" src="http://fakeimg.pl/350x150?text={{ song.title }}" alt="Card image cap">
-			  <div class="card-block">
-			    <h4 class="card-title">{{ song.artist }}</h4>
-			    <p class="card-text">Difficulty: {{ song.difficulty }}</p>
-			    <p class="card-text">Released: {{ song.released }}</p>
-			    <a href="#" class="btn btn-primary">Go somewhere</a>
-			  </div>
-			</div>
+<h2>{{ artist.grouper }}</h2>
+{% set artist_index =  loop.index  %}	
+<!-- BONUS TASK 2: filter out songs with difficulty < 10 -->
+{% for song in artist.list if song.difficulty > 10 %}		
+	<!-- Generate random song rating -->
+	{% set rating =  range(1, 6) | random  %}
+	{% set song_index =  loop.index  %}
+	{% set song_id =  artist_index ~ song_index  %}
+	<div class="col col-sm-6 col-md-4">
+		<div class="card">
+		  <img class="card-img-top" src="http://fakeimg.pl/350x150?text={{ song.title }}" 
+		  	alt="Card image cap">
+		  <div class="card-block">
+		    <h4 class="card-title">{{ song.artist }}
+			    <!-- meta -->
+			    <span class="badge" id="badge-{{ song_id }}">
+				    {% if session.songs_meta and session.songs_meta.get(song_id).Clicked %}
+							{{ session.songs_meta.get(song_id).Clicked }}
+						{% else %}
+							False
+						{% endif %}
+					</span>					
+			    <!-- meta -->		
+				</h4>			
+		    <p class="card-text">Difficulty: {{ song.difficulty }}</p>
+		    <p class="card-text">Released: {{ song.released }}</p>
+		    <!-- Star Rating -->
+		    <fieldset class="rating">
+		    	<!-- Generate a random song rating -->
+					{% for star_index in range(1,6) %}
+			    <input type="radio" id="star{{ star_index}}-{{ artist_index }}{{ song_index }}" 
+			    	{% if rating == (6 - star_index) %}
+			    		checked="checked"
+			    	{% endif %}
+			    	name="rating-song-{{ song_id }}" value="{{ star_index }}" />
+			    	<label class = "full" for="star{{ star_index}}-{{ artist_index }}{{ song_index }}"></label>
+			    {% endfor %}
+				</fieldset>
+				<!-- End Star Rating -->			    
+				<a class="btn btn-primary meta-btn" data-song-id="{{ song_id }}">Meta</a>
+		  </div>
 		</div>
-	{% endfor %}
+	</div>
+{% endfor %}
 </div>
+{% endfor %}	
 
 {% endblock %}
